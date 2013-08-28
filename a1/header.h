@@ -27,14 +27,18 @@ while(1<2){
     x = strtol(buf, &c, 10); //convert to long
 
     if (buf[0] != '\n' && (*c == '\n' || *c == '\0')){ //check to make sure user actually entered a value and that value is an integer
-      printf ("%ld!= %ld\n", x,compute_factorial(x)); //display output
+      if(x<0)
+         printf("Please enter only a positive integer value or q\n");
+      else
+         printf ("%ld!= %ld\n", x,compute_factorial(x)); //display output
     } 
     else if(*c =='q')
     {
+       printf("You have left the game!\n");
        return;
     }
     else{
-      printf ("Please enter only an integer value or q\n"); //user entered and invalid integer, loop repeats.
+       printf ("Please enter only a positive integer value or q\n"); //user entered and invalid integer, loop repeats.
     }
   }
  }
