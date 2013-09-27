@@ -1,3 +1,10 @@
+/*
+Name : Seth Shelnutt
+UF ID: 42941969
+Gator ID: s.shelnutt
+Discussion section # : 1085
+*/
+
 using namespace std;
 
 class chainNode

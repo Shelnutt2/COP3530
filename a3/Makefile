@@ -7,7 +7,7 @@
 # What compiler to use
 CC=g++
 # CFLAGS to pass
-CFLAGS=-g -c -Wall -I.
+CFLAGS=-c -Wall -I.
 
 all: main1 main2 tar
 
@@ -19,6 +19,8 @@ main2: main2.o Chain.o ChainNode.o IOcode.o Myexception.o
 
 main1.o: main1.cpp
 	$(CC) $(CFLAGS) main1.cpp
+main2.o: main2.cpp
+	$(CC) $(CFLAGS) main2.cpp
 
 Arraylist.o: Arraylist.cpp
 	$(CC) $(CFLAGS) Arraylist.cpp
@@ -36,7 +38,7 @@ ChainNode.o: ChainNode.cpp
 	$(CC) $(CFLAGS) ChainNode.cpp
 
 clean:
-	rm -rf *o main SethShelnutt_42941969.tar
+	rm -rf *o main1 main2 SethShelnutt_42941969.tar
 
 tar:
 	tar -cf SethShelnutt_42941969.tar IOcode.cpp IOcode.h Myexception.cpp Myexception.h Linearlist.h Arraylist.cpp Arraylist.h Chain.cpp Chain.h ChainNode.cpp ChainNode.h main1.cpp main2.cpp Makefile
