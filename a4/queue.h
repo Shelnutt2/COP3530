@@ -25,7 +25,7 @@ class queue : public arrayList
     virtual int* back();
     virtual int* front();
     virtual void pop();
-    virtual void push(const int theElement);
+    virtual void push(int theElement);
 
    protected:
     arrayList* queueArray;

@@ -16,6 +16,9 @@ using namespace std;
 #include <queue.h>
 #endif
 
+#define COLUMNS = 13
+#define ROWS = 15
+
 struct Maze{
    char maze[13][15];
    int rows;
@@ -27,7 +30,9 @@ class RatInMaze {
     Maze maze;
     stack* Stack;
     queue* Queue;
-    size_t currentPOS[2];
+    int currentPOS[2];
+    int globalcounter,perfcounter;
+
   public:
     RatInMaze();
     bool searchStack(int fromX,int fromY,int toX,int toY);

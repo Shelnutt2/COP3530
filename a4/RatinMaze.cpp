@@ -11,7 +11,7 @@ Discussion section # : 1085
 #include <stdint.h>
 
 #if 1
-#define dprint printf
+#define dprint 
 #endif
 
 #define cancled printf("Search canceled \n");
@@ -19,10 +19,34 @@ Discussion section # : 1085
 using namespace std;
 
 RatInMaze::RatInMaze(){
-        Stack = new stack(10);
-        Queue = new queue(10);
+        Stack = new stack(128);
+        Queue = new queue(2);
         currentPOS[0] = -1;
         currentPOS[1] = -1;
+}
+
+int computeCord(int x, int y){
+    if(y == 0)
+        return x;
+    else if (x == 0)
+        return y * 15;
+    else
+        return (y * 15) + x;
+
+}
+
+int computeXCord(int w){
+    if (w < 0)
+        return -1;
+    else
+        return w - ((w / 15) * 15);
+}
+
+int computeYCord(int w){
+    if (w < 0)
+        return -1;
+    else
+        return w / 15;
 }
 
 bool RatInMaze::searchStack(int fromX,int fromY,int toX,int toY){
@@ -34,83 +58,59 @@ bool RatInMaze::searchStack(int fromX,int fromY,int toX,int toY){
         cancled;
         return false;
     }
-    if(currentPOS[0] == -1 || currentPOS[1] == -1){
-        currentPOS[0] = fromX;
-        currentPOS[1] = fromY;
-    }
+    currentPOS[0] = fromX;
+    currentPOS[1] = fromY;
+    maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+    globalcounter = 0;
+    perfcounter = 0;
     dprint("Stack size is: %d\n", Stack->size());
-    Stack->push((int)(intptr_t)currentPOS);
+    Stack->push(computeCord(currentPOS[0],currentPOS[1]));
     dprint("Stack size is: %d\n", Stack->size());
-#if 0
-
-    dprint("Original is: %ld \n", currentPOS[1]);
-    dprint("Original is: %ld \n", currentPOS);
-    intptr_t test = ((intptr_t)currentPOS);
-    dprint("Middle is: %lu \n", ((int*)test));
-    int test2 = ((int)(intptr_t)currentPOS);
-    dprint("Hack is: %d \n", ((int*)test2));
-    dprint("Hack is: %d \n", ((int*)test2)[0]);
-    intptr_t t = ((intptr_t)((Stack->top())[0]));
-    dprint("T is: %d \n", t);
-    dprint("T[0] is: %d \n", ((intptr_t*)t)[0]);
-    dprint("T[1] is: %d \n", ((intptr_t*)t)[1]);
-    intptr_t *ptr = ((intptr_t*)((Stack->top())[0]));
-    dprint("ptr is: %d \n", ptr);
-    dprint("ptr[0] is: %d \n", ptr[0]);
-    dprint("ptr[1] is: %d \n", ptr[1]);
-    dprint("Top Stack is: %d \n", (Stack->top())[0]);
-    dprint("Top Stack is: %d \n", ((intptr_t*)((Stack->top())[0])));
-#endif
-    while(((intptr_t*)((Stack->top())[0]))[0] != toX && ((intptr_t*)((Stack->top())[0]))[1] != toY){
-        size_t x[2];
-        x[0] = ((uintptr_t*)((Stack->top())[0]))[0];
-        x[1] = ((intptr_t*)((Stack->top())[0]))[1];
-        dprint("current x is: %d, current y is: %d\n",x[0],x[1]);
-        dprint("Columns are: %d\n",maze.columns);
-        dprint("Rows are: %d\n",maze.rows);
-        dprint("x[0] + 1 = %d\n",x[0]+1);
+    bool finished = false;
+    while(!finished){
+        currentPOS[0] = computeXCord(*Stack->top());
+        currentPOS[1] = computeYCord(*Stack->top());
          //Try moving right
-        if(((x[0] + 1) <= maze.columns) && maze.maze[x[1]][(x[0] + 1)] == '0'){
-            printf("Moving right\n");
-            x[0] = x[0]+1;
-            maze.maze[x[1]][x[0]] = '2';
-            Stack->push((int)(intptr_t)x);
-            dprint("x is %d, y is %d\n",x[0],x[1]);
+        if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0'){
+            dprint("Moving right\n");
+            currentPOS[0] = currentPOS[0]+1;
+            dprint("currentPOS[0]: %d\n",currentPOS[0]);
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
         }
          //Try moving down
-        else if(!((x[1] + 1) > maze.rows) && maze.maze[(x[1]+1)][x[0]] == '0'){
-            printf("Moving down\n");
-            x[1] = x[1]+1;
-            maze.maze[x[1]][x[0]] = '2';
-            Stack->push((int)(intptr_t)x);
+        else if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0'){
+            dprint("Moving down\n");
+            currentPOS[1] = currentPOS[1]+1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
         }
          //Try moving left
-        else if(!((x[0] - 1) < 0 ) && maze.maze[x[1]][(x[0] - 1)] == '0'){
-            printf("Moving left\n");
-            x[0] = x[0]-1;
-            maze.maze[x[1]][x[0]] = '2';
-            Stack->push((int)(intptr_t)x);
+        else if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0'){
+            dprint("Moving left\n");
+            currentPOS[0] = currentPOS[0]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
         }
          //Try moving up
-        else if(!((x[1] - 1) < 0 ) && maze.maze[(x[1]-1)][x[0]] == '0'){
-            printf("Moving up\n");
-            x[1] = x[1]-1;
-            maze.maze[x[1]][x[0]] = '2';
-            Stack->push((int)(intptr_t)x);
+        else if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0'){
+            dprint("Moving up\n");
+            currentPOS[1] = currentPOS[1]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
         }
         else{
-            printf("Popping\n");
+            dprint("Popping\n");
             Stack->pop();
+            perfcounter--;
         }
-        dprint("x : %d\n",x);
-        intptr_t *test = (intptr_t*)(Stack->top());
-        dprint("test : %lu\n",test[0]);
-        size_t ptr = ((size_t*)(Stack->top()))[0];
-        dprint("ptr : %lu\n",ptr);
-//       intptr_t *test3 = ((Stack->top()))[0];
-        dprint("test3 : %lu\n",((intptr_t*)((Stack->top())[0]))[0]);
-        printf("new x is: %d, new y is: %d\n", ((intptr_t*)((Stack->top())[0]))[0],((intptr_t*)((Stack->top())[0]))[1]);
-        RatInMaze::print(true);
+        globalcounter++;
+        if((currentPOS[0] == toX) && (currentPOS[1] == toY))
+            finished = true;
     }
     return true;
 }
@@ -125,11 +125,66 @@ bool RatInMaze::searchQueue(int fromX,int fromY,int toX,int toY){
         return false;
     }
 
-    else
-        return true;
+    currentPOS[0] = fromX;
+    currentPOS[1] = fromY;
+    maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+
+    globalcounter = 0;
+    perfcounter = 0;
+    dprint("Queue size is: %d\n", Queue->size());
+    Queue->push(computeCord(currentPOS[0],currentPOS[1]));
+    dprint("Queue size is: %d\n", Queue->size());
+    bool finished = false;
+    while(!finished){
+        currentPOS[0] = computeXCord(*Queue->front());
+        currentPOS[1] = computeYCord(*Queue->front());
+         //Try moving right
+        if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0'){
+            dprint("Moving right\n");
+            currentPOS[0] = currentPOS[0]+1;
+            dprint("currentPOS[0]: %d\n",currentPOS[0]);
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Queue->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+         //Try moving down
+        if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0'){
+            dprint("Moving down\n");
+            currentPOS[1] = currentPOS[1]+1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Queue->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+         //Try moving left
+        if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0'){
+            dprint("Moving left\n");
+            currentPOS[0] = currentPOS[0]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Queue->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+         //Try moving up
+        if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0'){
+            dprint("Moving up\n");
+            currentPOS[1] = currentPOS[1]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Queue->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+        else{
+            dprint("Popping\n");
+            Queue->pop();
+            perfcounter--;
+        }
+        globalcounter++;
+        if((currentPOS[0] == toX) && (currentPOS[1] == toY))
+            finished = true;
+    }
+return true;
 }
 
 bool RatInMaze::searchStackSmart(int fromX,int fromY,int toX,int toY){
+
     if(!inMaze("Starting",fromX, fromY)){
         cancled;
         return false;
@@ -138,15 +193,245 @@ bool RatInMaze::searchStackSmart(int fromX,int fromY,int toX,int toY){
         cancled;
         return false;
     }
+    currentPOS[0] = fromX;
+    currentPOS[1] = fromY;
+    maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+    globalcounter = 0;
+    perfcounter = 0;
+    dprint("Stack size is: %d\n", Stack->size());
+    Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+    dprint("Stack size is: %d\n", Stack->size());
+    bool finished = false;
+    while(!finished){
+        currentPOS[0] = computeXCord(*Stack->top());
+        currentPOS[1] = computeYCord(*Stack->top());
 
-    else
-        return true;
+        if((toY - currentPOS[1]) > 0)
+            if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0'){
+                dprint("Moving down\n");
+                currentPOS[1] = currentPOS[1]+1;
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+            }
+        else if((toY - currentPOS[1]) < 0)
+            if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0'){
+                dprint("Moving up\n");
+                currentPOS[1] = currentPOS[1]-1;
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+        }
+        else if((toX - currentPOS[0]) > 0)
+            if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0'){
+                dprint("Moving right\n");
+                currentPOS[0] = currentPOS[0]+1;
+                dprint("currentPOS[0]: %d\n",currentPOS[0]);
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+        }
+
+        else if((toX - currentPOS[0]) < 0)
+            if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0'){
+                dprint("Moving left\n");
+                currentPOS[0] = currentPOS[0]-1;
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+            }
+
+
+         //Try moving right
+        if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0'){
+            dprint("Moving right\n");
+            currentPOS[0] = currentPOS[0]+1;
+            dprint("currentPOS[0]: %d\n",currentPOS[0]);
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+         //Try moving down
+        else if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0'){
+            dprint("Moving down\n");
+            currentPOS[1] = currentPOS[1]+1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+         //Try moving left
+        else if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0'){
+            dprint("Moving left\n");
+            currentPOS[0] = currentPOS[0]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+         //Try moving up
+        else if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0'){
+            dprint("Moving up\n");
+            currentPOS[1] = currentPOS[1]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+        }
+        else{
+            dprint("Popping\n");
+            Stack->pop();
+            perfcounter--;
+        }
+        globalcounter++;
+        if((currentPOS[0] == toX) && (currentPOS[1] == toY))
+            finished = true;
+    }
+    return true;
+
+#if 0
+    enum{
+        RIGHT = 1,
+        DOWN = 2,
+        LEFT = 3,
+        UP = 4
+    } direction;
+
+    if(!inMaze("Starting",fromX, fromY)){
+        cancled;
+        return false;
+    }
+    else if(!inMaze("Ending",toX, toY)){
+        cancled;
+        return false;
+    }
+    currentPOS[0] = fromX;
+    currentPOS[1] = fromY;
+    maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+    globalcounter = 0;
+    perfcounter = 0;
+    dprint("Stack size is: %d\n", Stack->size());
+    Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+    dprint("Stack size is: %d\n", Stack->size());
+    bool finished = false;
+    int d = UP;
+    while(!finished){
+        currentPOS[0] = computeXCord(*Stack->top());
+        currentPOS[1] = computeYCord(*Stack->top());
+        if((toY - currentPOS[1]) > 0)
+            if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0')
+                d=DOWN;
+            else
+                continue;
+        else if((toY - currentPOS[1]) < 0)
+            if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0')
+                d=UP;
+            else
+                continue;
+        else
+            if((toX - currentPOS[0]) > 0)
+                if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0')
+                    d=RIGHT;
+                else
+                    continue;
+            else if((toX - currentPOS[0]) < 0)
+                if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0')
+                    d=LEFT;
+                else
+                    continue;
+        
+        switch(d){
+         //Try moving right
+        //if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0'){
+        case RIGHT:{
+            dprint("Moving right\n");
+            currentPOS[0] = currentPOS[0]+1;
+            dprint("currentPOS[0]: %d\n",currentPOS[0]);
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+            break;
+        }
+         //Try moving down
+        //else if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0'){
+        case DOWN:{
+            dprint("Moving down\n");
+            currentPOS[1] = currentPOS[1]+1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+            break;
+        }
+         //Try moving left
+//        else if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0'){
+        case LEFT:{
+            dprint("Moving left\n");
+            currentPOS[0] = currentPOS[0]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+            break;
+        }
+         //Try moving up
+//        else if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0'){
+        case UP:{
+            dprint("Moving up\n");
+            currentPOS[1] = currentPOS[1]-1;
+            maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+            Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+            perfcounter++;
+            break;
+        }
+        default:{
+            //Try moving right
+            if(((currentPOS[0] + 1) < maze.columns) && maze.maze[currentPOS[1]][(currentPOS[0] + 1)] == '0'){
+                dprint("Moving right\n");
+                currentPOS[0] = currentPOS[0]+1;
+                dprint("currentPOS[0]: %d\n",currentPOS[0]);
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+            }
+            //Try moving down
+            else if(!((currentPOS[1] + 1) >= maze.rows) && maze.maze[(currentPOS[1]+1)][currentPOS[0]] == '0'){
+                dprint("Moving down\n");
+                currentPOS[1] = currentPOS[1]+1;
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+            }
+            //Try moving left
+            else if(!((currentPOS[0] - 1) < 0 ) && maze.maze[currentPOS[1]][(currentPOS[0] - 1)] == '0'){
+                dprint("Moving left\n");
+                currentPOS[0] = currentPOS[0]-1;
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+            }
+            //Try moving up
+            else if(!((currentPOS[1] - 1) < 0 ) && maze.maze[(currentPOS[1]-1)][currentPOS[0]] == '0'){
+                dprint("Moving up\n");
+                currentPOS[1] = currentPOS[1]-1;
+                maze.maze[currentPOS[1]][currentPOS[0]] = '2';
+                Stack->push(computeCord(currentPOS[0],currentPOS[1]));
+                perfcounter++;
+            }
+            else{
+                dprint("Popping\n");
+                Stack->pop();
+                perfcounter--;
+            }
+        }
+    }
+        globalcounter++;
+        if((currentPOS[0] == toX) && (currentPOS[1] == toY))
+            finished = true;
+    }
+    return true;
+#endif
 }
 
 void RatInMaze::load(char inMaze[13][15], int rows, int columns){
     int i=0,j=0;
     for(i=0;i<13;i++){
-        for(j=0;j<13;j++){
+        for(j=0;j<15;j++){
             maze.maze[i][j] = inMaze[i][j];
         }
     }
@@ -160,16 +445,14 @@ void RatInMaze::print(bool done){
        //cout << maze.maze << endl;
     int i=0,j=0;
         for(i=0;i<13;i++){
-            for(j=0;j<13;j++){
+            for(j=0;j<15;j++){
                 printf("%c",maze.maze[i][j]);
             }
             printf("\n");
         }
+    printf("I've travelled through %d square(s). The path contains %d square(s)\n",globalcounter,perfcounter);
     printf("\n\n");
     }
-/*    else{
-        cout << "Lost" << endl;
-    }*/
 }
 
 bool RatInMaze::inMaze(string point, int X, int Y){

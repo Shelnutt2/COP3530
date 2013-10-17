@@ -17,7 +17,10 @@ queue::queue(int initialCapacity){
 }
 
 bool queue::empty(){
-return queueArray->empty();
+    if(queueArray->size() > 0)
+        return false;
+    else
+        return true;
 }
 
 int queue::size(){
@@ -26,33 +29,34 @@ return queueArray->size();
 
 int* queue::back(){
    if (queueArray->empty())
-       queueEmpty();
+        queueEmpty();
    return queueArray->get(queueArray->size() - 1);
 }
 
 int* queue::front(){
-   if (queueArray->empty())
-       queueEmpty();
+   if (queueArray->size() == 0)
+        queueEmpty();
    return queueArray->get(0);
 }
 
 void queue::pop(){
-   if (queueArray->empty())
+   if (queueArray->size() == 0)
         queueEmpty();
    arrayList* a = new arrayList(queueArray->size() - 1);
-   for(int i = 1; i < queueArray->size()-2; i++){
+   for(int i = 1; i < queueArray->size()-1; i++){
       a->insert(i,*(queueArray->get(i)));
    }
    queueArray = a;
 }
 
-void queue::push(const int theElement){
-   arrayList* a = new arrayList(queueArray->size() + 1);
+void queue::push(int theElement){
+    queueArray->insert(queueArray->size(),theElement);
+/*   arrayList* a = new arrayList(queueArray->size() + 1);
    for(int i = 0; i < queueArray->size()-1; i++){
       a->insert(i,*(queueArray->get(i)));
    }
    a->insert(a->size()-1,theElement);
-   queueArray = a;
+   queueArray = a;*/
 }
 
 void queue::queueEmpty(){
