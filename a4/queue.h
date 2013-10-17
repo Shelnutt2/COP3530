@@ -15,7 +15,7 @@ using namespace std;
 class queue : public arrayList
 {
    private:
-    virtual void queueEmpty();
+    virtual void queueEmpty(); //Function to identify if queue is empty or not
 
    public:
     queue(int initialCapacity = 1);

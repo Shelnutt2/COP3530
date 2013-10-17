@@ -24,11 +24,11 @@ bool queue::empty(){
 }
 
 int queue::size(){
-return queueArray->size();
+    return queueArray->size();
 }
 
 int* queue::back(){
-   if (queueArray->empty())
+   if (queueArray->empty()) //Check for if the queue is empty
         queueEmpty();
    return queueArray->get(queueArray->size() - 1);
 }
@@ -42,21 +42,11 @@ int* queue::front(){
 void queue::pop(){
    if (queueArray->size() == 0)
         queueEmpty();
-   arrayList* a = new arrayList(queueArray->size() - 1);
-   for(int i = 1; i < queueArray->size()-1; i++){
-      a->insert(i,*(queueArray->get(i)));
-   }
-   queueArray = a;
+   queueArray->erase(0);
 }
 
-void queue::push(int theElement){
+void queue::push(int theElement){ //Push element to queue
     queueArray->insert(queueArray->size(),theElement);
-/*   arrayList* a = new arrayList(queueArray->size() + 1);
-   for(int i = 0; i < queueArray->size()-1; i++){
-      a->insert(i,*(queueArray->get(i)));
-   }
-   a->insert(a->size()-1,theElement);
-   queueArray = a;*/
 }
 
 void queue::queueEmpty(){

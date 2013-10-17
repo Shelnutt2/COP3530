@@ -7,7 +7,7 @@
 # What compiler to use
 CC=g++
 # CFLAGS to pass
-CFLAGS=-c -Wall -I. -g -std=c++11
+CFLAGS=-c -Wall -I. -g
 
 all: main tar
 
