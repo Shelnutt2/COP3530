@@ -27,7 +27,7 @@ class RatInMaze {
     Maze maze;
     stack* Stack;
     queue* Queue;
-    int currentPOS[2];
+    size_t currentPOS[2];
   public:
     RatInMaze();
     bool searchStack(int fromX,int fromY,int toX,int toY);

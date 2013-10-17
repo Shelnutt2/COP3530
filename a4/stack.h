@@ -23,7 +23,7 @@ class stack : public arrayList
     virtual int size();
     virtual int* top();
     virtual void pop();
-    virtual void push(int& theElement);
+    virtual void push(int theElement);
 
    protected:
     arrayList* stackArray;

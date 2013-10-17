@@ -17,11 +17,14 @@ stack::stack(int initialCapacity){
 }
 
 bool stack::empty(){
-return stackArray->empty();
+    if(stackArray->size() > 0)
+        return false;
+    else
+        return true;
 }
 
 int stack::size(){
-return stackArray->size();
+    return stackArray->size();
 }
 
 int* stack::top(){
@@ -31,22 +34,31 @@ int* stack::top(){
 }
 
 void stack::pop(){
-   if (stackArray->empty())
+    int size = stackArray->size();
+    if (size < 1)
         stackEmpty();
-   arrayList* a = new arrayList(stackArray->size() - 1);
-   for(int i = 0; i < stackArray->size()-2; i++){
-      a->insert(i,*(stackArray->get(i)));
-   }
-   stackArray = a;
+    else if (size > 1){
+       arrayList* a = new arrayList(stackArray->size() - 1);
+       for(int i = 0; i < stackArray->size()-1; i++){
+          a->insert(i,*(stackArray->get(i)));
+       }
+       stackArray = a;
+    }
 }
 
-void stack::push(int& theElement){
-   arrayList* a = new arrayList(stackArray->size() + 1);
-   for(int i = 0; i < stackArray->size()-1; i++){
-      a->insert(i,*(stackArray->get(i)));
-   }
-   a->insert(a->size()-1,theElement);
-   stackArray = a;
+void stack::push(int theElement){
+    stackArray->insert(stackArray->size(),theElement);
+    /*if(stackArray->size() == 0){
+        stackArray->insert(stackArray->size(),theElement);
+    }
+    else{
+        arrayList* a = new arrayList(stackArray->size() + 1);
+        for(int i = 0; i < stackArray->size(); i++){
+           a->insert(i,*(stackArray->get(i)));
+        }
+        a->insert(a->size(),theElement);
+        stackArray = a;
+    }*/
 }
 
 void stack::stackEmpty(){
