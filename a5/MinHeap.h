@@ -23,6 +23,7 @@ class MinHeap : public BinaryTree
     virtual int get(int position);
     virtual void sort();
     virtual void remove(int position);
+    virtual int size();
 //    virtual void getChildren(int a);
 //    virtual void getParent();
 

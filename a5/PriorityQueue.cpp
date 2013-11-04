@@ -24,7 +24,6 @@ PriorityQueue::PriorityQueue(arrayList* Array){
 }
 
 void PriorityQueue::initialize(arrayList *Array, int size){
-
     minHeap = new MinHeap(Array,size);
 }
 
@@ -72,10 +71,10 @@ void PriorityQueue::sort(){
 
 int PriorityQueue::pop(){
     int first = top();
-    minHeap -> remove(0);
+    minHeap -> remove(1);
     return first;
 }
 
 int PriorityQueue::top(){
-    return minHeap -> get(0);
+    return minHeap -> get(1);
 }

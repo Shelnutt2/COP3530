@@ -33,6 +33,7 @@ MinHeap::MinHeap(arrayList* MinArray, int size){
     for(i = 1; i<=size;i++){
         binTree->insert(i,*MinArray->get(i-1));
     }
+    sort();
 }
 
 void MinHeap::insert(int element){
@@ -46,9 +47,14 @@ int MinHeap::get(int index){
 
 void MinHeap::remove(int index){
     binTree -> remove(index);
-    sort();
+    if(size() > 1)
+        sort();
 }
 
 void MinHeap::sort(){
     binTree -> sort();
+}
+
+int MinHeap::size(){
+    return binTree -> size();
 }

@@ -23,11 +23,17 @@ BinaryTree::BinaryTree(arrayList* Array){
 }
 
 void BinaryTree::insert(int position, int element){
+//    printf("Position is: %d, element is: %d \n",position,element);
     binArray->insert(position-1,element);
+//    printf("The inserted element is now: %d\n", get(position));
 }
 
 void BinaryTree::remove(int position){
-    binArray->erase(position-1);
+    if(size() == 1){
+        binArray = new arrayList();
+    }
+    else
+        binArray->erase(position-1);
 }
 
 #if 0
@@ -52,7 +58,6 @@ int BinaryTree::get(int position){
 }
 
 int BinaryTree::size(){
-    printf("size is: %d",binArray->size());
     return binArray->size();
 }
 
@@ -74,13 +79,13 @@ void BinaryTree::sort(){
     int temp[size1];
     int i;
     for(i = 0; i<size1;i++){
-        temp[i] = *binArray->get(i);
+        temp[i] = get(i+1);
     }
     size1 = sizeof(temp)/sizeof(temp[0]);
     qsort(temp, size1,sizeof(int), cmp);
     binArray = new arrayList(size1);
     for(i = 0; i<size1;i++){
-        binArray->insert(i,temp[i]);
+        insert(i+1,temp[i]);
     }
 
 }
