@@ -10,15 +10,16 @@ Discussion section # : 1085
 #include <BinaryTree.h>
 #endif
 
-using namespace std;
+#include <stdio.h>
 
+using namespace std;
 
 BinaryTree::BinaryTree(int initialCapacity){
     binArray = new arrayList(initialCapacity);
 }
 
-BinaryTree::BinaryTree(arrayList *binArray){
-    binArray = new arrayList(*binArray);
+BinaryTree::BinaryTree(arrayList* Array){
+    binArray = new arrayList(*Array);
 }
 
 void BinaryTree::insert(int position, int element){
@@ -51,7 +52,8 @@ int BinaryTree::get(int position){
 }
 
 int BinaryTree::size(){
-    return binArray -> size();
+    printf("size is: %d",binArray->size());
+    return binArray->size();
 }
 
 int cmp(const void * pa, const void * pb)
@@ -68,16 +70,16 @@ int cmp(const void * pa, const void * pb)
 }
 
 void BinaryTree::sort(){
-    int temp[binArray->size()];
+    int size1 = size();
+    int temp[size1];
     int i;
-    for(i = 0; i<=binArray->size();i++){
+    for(i = 0; i<size1;i++){
         temp[i] = *binArray->get(i);
     }
-    int size = sizeof(temp)/sizeof(temp[0]);
-    qsort(temp, size,sizeof(int), cmp);
-    delete binArray;
-    binArray = new arraylist();
-    for(i = 0; i<size;i++){
+    size1 = sizeof(temp)/sizeof(temp[0]);
+    qsort(temp, size1,sizeof(int), cmp);
+    binArray = new arrayList(size1);
+    for(i = 0; i<size1;i++){
         binArray->insert(i,temp[i]);
     }
 

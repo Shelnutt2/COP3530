@@ -10,6 +10,10 @@ Discussion section # : 1085
 #include <MinHeap.h>
 #endif
 
+#ifndef ARRLIST
+#define ARRLIST
+#include <ArrayLisy.h>
+#endif
 #include <functional>
 
 using namespace std; 
@@ -21,6 +25,14 @@ MinHeap::MinHeap(int initialCapacity){
 MinHeap::MinHeap(arrayList *MinArray){
     binTree = new BinaryTree(MinArray);
     sort();
+}
+
+MinHeap::MinHeap(arrayList* MinArray, int size){
+    binTree = new BinaryTree(size);
+    int i = 1;
+    for(i = 1; i<=size;i++){
+        binTree->insert(i,*MinArray->get(i-1));
+    }
 }
 
 void MinHeap::insert(int element){

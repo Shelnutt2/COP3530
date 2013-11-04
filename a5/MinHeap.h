@@ -17,6 +17,7 @@ class MinHeap : public BinaryTree
    public:
     MinHeap(int initialCapacity = 1);
     MinHeap(arrayList *MinArray);
+    MinHeap(arrayList *MinArray,int size);
     virtual ~MinHeap(){delete binTree;};
     virtual void insert(int element);
     virtual int get(int position);

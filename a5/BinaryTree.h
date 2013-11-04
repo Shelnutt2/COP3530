@@ -19,7 +19,7 @@ class BinaryTree : public arrayList
 {
    public:
     BinaryTree(int initialCapacity = 1);
-    BinaryTree(arrayList *binArray);
+    BinaryTree(arrayList* Array);
     virtual ~BinaryTree(){delete binArray;};
     virtual void insert(int position, int element);
 //    virtual int* getChildren(int position);

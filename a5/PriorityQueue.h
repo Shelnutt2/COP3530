@@ -15,8 +15,8 @@ using namespace std;
 class PriorityQueue : public MinHeap
 {
    public:
-    PriorityQueue(int initialCapacity = 1);
-    PriorityQueue(arrayList *Array);
+    PriorityQueue();
+    PriorityQueue(arrayList* Array);
 //    virtual ~PriorityQueue(){delete MinHeap;};
     virtual void initialize(arrayList* Array, int size);
     virtual void preOrder(int position);

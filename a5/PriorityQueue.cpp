@@ -15,17 +15,17 @@ Discussion section # : 1085
 using namespace std; 
 
 
-PriorityQueue::PriorityQueue(int initialCapacity){
-    minHeap = new MinHeap(initialCapacity);
+PriorityQueue::PriorityQueue(){
+    //minHeap = new MinHeap(initialCapacity);
 }
 
-PriorityQueue::PriorityQueue(arrayList *Array){
+PriorityQueue::PriorityQueue(arrayList* Array){
     minHeap = new MinHeap(Array);
 }
 
 void PriorityQueue::initialize(arrayList *Array, int size){
-    delete minHeap;
-    minHeap = new MinHeap(Array);
+
+    minHeap = new MinHeap(Array,size);
 }
 
 void PriorityQueue::preOrder(int position){
