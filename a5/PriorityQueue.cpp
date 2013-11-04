@@ -15,66 +15,66 @@ Discussion section # : 1085
 using namespace std; 
 
 
-PriorityQueue::PriorityQueue(){
+PriorityQueue::PriorityQueue(){ //Constructor to intialize based on size
     //minHeap = new MinHeap(initialCapacity);
 }
 
-PriorityQueue::PriorityQueue(arrayList* Array){
+PriorityQueue::PriorityQueue(arrayList* Array){ //Constructor to intialize based on an arrayList
     minHeap = new MinHeap(Array);
 }
 
-void PriorityQueue::initialize(arrayList *Array, int size){
+void PriorityQueue::initialize(arrayList *Array, int size){ //intialize based on size and a given array lsit
     minHeap = new MinHeap(Array,size);
 }
 
-void PriorityQueue::preOrder(int position){
+void PriorityQueue::preOrder(int position){ //Print elements in preorder form
+    if (position == 0)
+        position++; //Start with 1 not 0;
+    if (position > minHeap -> size()) //If we are outside of the heap return
+      return;
+    else{
+      printf("%d ",minHeap -> get(position)); //Print element
+      preOrder(position*2); //Visit left child
+      preOrder(position*2+1); //Visit right child
+    }
+}
+
+void PriorityQueue::postOrder(int position){ //Print elements in postorder form
     if (position == 0)
         position++; //Start with 1 not 0;
     if (position > minHeap -> size())
       return;
     else{
-      printf("%d ",minHeap -> get(position));
-      preOrder(position*2);
-      preOrder(position*2+1);
+      postOrder(position*2); //Visit left child
+      postOrder(position*2+1); //Visit right child
+      printf("%d ",minHeap -> get(position)); //Print element
     }
 }
 
-void PriorityQueue::postOrder(int position){
+void PriorityQueue::inOrder(int position){ //Print elements in order form
     if (position == 0)
         position++; //Start with 1 not 0;
     if (position > minHeap -> size())
       return;
     else{
-      postOrder(position*2);
-      postOrder(position*2+1);
-      printf("%d ",minHeap -> get(position));
+      postOrder(position*2); //Visit left child
+      printf("%d ",minHeap -> get(position)); //Print element
+      postOrder(position*2+1); //Visit right child
     }
 }
 
-void PriorityQueue::inOrder(int position){
-    if (position == 0)
-        position++; //Start with 1 not 0;
-    if (position > minHeap -> size())
-      return;
-    else{
-      postOrder(position*2);
-      printf("%d ",minHeap -> get(position));
-      postOrder(position*2+1);
-    }
-}
-
-void PriorityQueue::sort(){
+void PriorityQueue::sort(){ //Sort the queue and remove all elements
     while(minHeap -> size() > 0){
-        printf("%d ",pop());
+        printf("%d ",pop()); //Print and pop
     }
 }
 
-int PriorityQueue::pop(){
-    int first = top();
-    minHeap -> remove(1);
-    return first;
+int PriorityQueue::pop(){ //Pop first element from queue
+    int first = top(); //Get top
+    minHeap -> remove(1); //Remove top
+    return first; //return previous top
 }
 
-int PriorityQueue::top(){
+int PriorityQueue::top(){ //Get top element
     return minHeap -> get(1);
 }

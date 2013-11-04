@@ -18,17 +18,15 @@ using namespace std;
 class BinaryTree : public arrayList
 {
    public:
-    BinaryTree(int initialCapacity = 1);
-    BinaryTree(arrayList* Array);
-    virtual ~BinaryTree(){delete binArray;};
-    virtual void insert(int position, int element);
-//    virtual int* getChildren(int position);
-//    virtual int getParent(int position);
-    virtual int get(int position);
-    virtual int size();
-    virtual void remove(int position);
-    void sort();
+    BinaryTree(int initialCapacity = 1); //Constructor to intialize based on size
+    BinaryTree(arrayList* Array); //Cosntructor to intialize based on arrayList
+    virtual ~BinaryTree(){delete binArray;}; //Deconstructor
+    virtual void insert(int position, int element); //Insertion method
+    virtual int get(int position); //Get the given element
+    virtual int size(); //Get the size of the binarytree
+    virtual void remove(int position); //Remove element
+    void sort(); //Sort the tree
 
    protected:
-    arrayList* binArray;
+    arrayList* binArray; //Underlying array
 };
