@@ -57,9 +57,9 @@ void PriorityQueue::inOrder(int position){ //Print elements in order form
     if (position > minHeap -> size())
       return;
     else{
-      postOrder(position*2); //Visit left child
+      inOrder(position*2); //Visit left child
       printf("%d ",minHeap -> get(position)); //Print element
-      postOrder(position*2+1); //Visit right child
+      inOrder(position*2+1); //Visit right child
     }
 }
 
@@ -70,9 +70,7 @@ void PriorityQueue::sort(){ //Sort the queue and remove all elements
 }
 
 int PriorityQueue::pop(){ //Pop first element from queue
-    int first = top(); //Get top
-    minHeap -> remove(1); //Remove top
-    return first; //return previous top
+    return minHeap -> remove(1); //Remove top and return value
 }
 
 int PriorityQueue::top(){ //Get top element

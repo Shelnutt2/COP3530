@@ -22,7 +22,7 @@ class MinHeap : public BinaryTree
     virtual void insert(int element); //Insert an element
     virtual int get(int position); //Get an index
     virtual void sort(); //Calls bintree's sort method
-    virtual void remove(int position); //Remove an indexs
+    virtual int remove(int position); //Remove an indexs
     virtual int size(); //Get the current size
 
    protected:

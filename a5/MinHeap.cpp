@@ -40,10 +40,11 @@ int MinHeap::get(int index){ //Get an element from the tree
     return binTree -> get(index);
 }
 
-void MinHeap::remove(int index){ //Remove an element from the tree
-    binTree -> remove(index); //Remove the element
+int MinHeap::remove(int index){ //Remove an element from the tree
+    int temp = binTree -> remove(index); //Remove the element
     if(size() > 1) //If we have more that one item, sort the tree.
         sort();
+    return temp;
 }
 
 void MinHeap::sort(){ //Call the sort function of binTree

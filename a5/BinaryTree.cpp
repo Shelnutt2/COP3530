@@ -11,6 +11,7 @@ Discussion section # : 1085
 #endif
 
 #include <stdio.h>
+#include <math.h>
 
 using namespace std;
 
@@ -26,13 +27,41 @@ void BinaryTree::insert(int position, int element){ //Insertation method
     binArray->insert(position-1,element); //Insert the element, offset for -1 since trees start at "1" but arrays at "0"
 }
 
-void BinaryTree::remove(int position){ //Remove a given index
+int BinaryTree::remove(int position){ //Remove a given index
+    int* temp = binArray->get(position-1);
     if(size() == 1){ //If we only have 1 index, just create a new array
         binArray = new arrayList();
     }
     else //Else remove the given index, offsetting for 1 again
         binArray->erase(position-1);
+    return *temp;
 }
+
+#if 0
+void BinaryTree::shiftdown(int index){
+    printf("shifting\n");
+    int current = index;
+    int child = current*2;
+    int Item = get(current);    // Used to compare values
+
+    while (child < size())
+    {
+        printf("current: %d, child: %d \n",current,child);
+        if (child < (size() - 1))
+            if (get(child) < get(child+1))  // Set Child to largest Child node
+                ++child;
+
+        if (Item < get(child)){    // Switch the Current node and the Child node
+            binArray -> changeValue(current,get(child));
+            current       = child;
+            child         = current*2;
+        }
+        else
+            break;
+    }
+    binArray -> changeValue(current,Item);
+}
+#endif
 
 int BinaryTree::get(int position){ //Get a given element
     return(*binArray->get(position-1));
@@ -55,7 +84,8 @@ int cmp(const void * pa, const void * pb) //Compare function for sorting
             return 1;
 }
 
-void BinaryTree::sort(){ //Sorting algorthm
+#if 0
+void BinaryTree::sort2(){ //Sorting algorthm
     int size1 = size(); //Get the current size
     int temp[size1]; //Create a temporary array
     int i;
@@ -70,3 +100,86 @@ void BinaryTree::sort(){ //Sorting algorthm
     }
 
 }
+#endif
+
+void BinaryTree::sort(){ //Sorting algorthm
+    int startingParent = floor(size()/2);
+    while(startingParent > 1){
+        if(startingParent*2 <= size())
+            break;
+        else
+            startingParent--;
+    }
+// printTree();
+    while(startingParent > 0){
+        compare(startingParent);
+        startingParent--;
+    }
+}
+
+void BinaryTree::printTree(){
+printf("     %d\n",get(1));
+printf("     /  \\\n");
+printf("   %d    %d\n",get(2),get(3));
+printf("  /   \\  / \\\n");
+printf(" %d    %d  %d  %d\n",get(4),get(5),get(6),get(7));
+printf(" /\\   /\n");
+printf("%d  %d %d\n\n",get(8),get(9),get(10));
+}
+
+void BinaryTree::compare(int index){
+    int temp = get(index);
+    if(index == 1){
+        compare2(index);
+    }
+    if(index*2+1 <= size() && get(index) > get(index*2+1)){
+        int temp2 = get(index*2+1);
+        binArray -> changeValue(index-1,temp2);
+        binArray -> changeValue((index*2),temp);
+        compare(index*2+1);
+    }
+    else if(index*2 <=size() && get(index) > get(index*2)){
+        int temp2 = get(index*2);
+        binArray -> changeValue(index-1,temp2);
+        binArray -> changeValue((index*2-1),temp);
+        compare(index*2);
+    }
+//    printTree();
+}
+
+void BinaryTree::compare2(int index){
+    int temp = get(index);
+        if(index*2 <= size() && get(index) > get(index*2)){
+            int temp2 = get(index*2);
+            binArray -> changeValue(index-1,temp2);
+            binArray -> changeValue((index*2-1),temp);
+            compare2(index*2);
+        }
+        else if(index*2+1 <=size() && get(index) > get(index*2+1)){
+            int temp2 = get(index*2+1);
+            binArray -> changeValue(index-1,temp2);
+            binArray -> changeValue((index*2),temp);
+            compare2(index*2+1);
+        }
+//    printTree();
+}
+#if 0
+void BinaryTree::compare2(int index){
+    int temp = get(index);
+    if(index*2+1 <= size() && get(index) > get(index*2+1)){
+        if(get(index*2+1)>=get(index*2)){
+            int temp2 = get(index*2+1);
+            binArray -> changeValue(index-1,temp2);
+            binArray -> changeValue((index*2),temp);
+            compare2(index*2+1);
+        }
+    }
+    else if(index*2 <=size() && get(index) > get(index*2)){
+        int temp2 = get(index*2);
+        binArray -> changeValue(index-1,temp2);
+        binArray -> changeValue((index*2-1),temp);
+        compare2(index*2);
+    }
+    printTree();
+}
+#endif
