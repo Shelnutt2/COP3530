@@ -70,7 +70,9 @@ void PriorityQueue::sort(){ //Sort the queue and remove all elements
 }
 
 int PriorityQueue::pop(){ //Pop first element from queue
-    return minHeap -> remove(1); //Remove top and return value
+    int temp = top();
+    minHeap -> remove(1); //Remove top and return value
+    return temp;
 }
 
 int PriorityQueue::top(){ //Get top element
