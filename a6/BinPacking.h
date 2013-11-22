@@ -12,5 +12,6 @@ class BinPacking{
         void firstFitPack(int *objectSize, int numberOfObjects, int binCapacity);
         void firstFitPack2(int *objectSize, int numberOfObjects, int binCapacity);
         void bestFitPack(int *objectSize, int numberOfObjects, int binCapacity);
+        void bestFitPack2(int *objectSize, int numberOfObjects, int binCapacity);
    
 };

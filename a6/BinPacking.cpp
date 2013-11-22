@@ -16,6 +16,11 @@ Discussion section # : 1085
 #include <BinaryTreeNode.h>
 #endif
 
+#ifndef _BinarySearchTree
+#define _BinarySearchTree
+#include <BinarySearchTree.h>
+#endif
+
 #ifndef _MaxWinnerTree
 #define _MaxWinnerTree
 #include <MaxWinnerTree.h>
@@ -23,7 +28,7 @@ Discussion section # : 1085
 
 using namespace std;
 
-void BinPacking::firstFitPack(int *objectSize, int numberOfObjects, int binCapacity){
+void BinPacking::firstFitPack2(int *objectSize, int numberOfObjects, int binCapacity){
     MaxWinnerTree* MWT = new MaxWinnerTree(objectSize,numberOfObjects,binCapacity);
     int i;
     for(i = 0;i<numberOfObjects;i++){
@@ -31,42 +36,11 @@ void BinPacking::firstFitPack(int *objectSize, int numberOfObjects, int binCapac
         bin->capacity -= objectSize[i];
         printf("Pack object %d in bin %d\n", i+1, bin->binNumber);            
     }
-    
-
-/*    int n = numberOfObjects;
-    BinaryTreeNode *bin = new BinaryTreeNode[n+1];
-    int i;
-    for(i = 1; i <=n;i++){
-        bin[i].capacity = binCapacity;
-        bin[i].initialCapacity = binCapacity;
-    }
-
-
-    for(i = 1;i<=n;i++){
-        int child = 2;
-        while(child <n){
-            int winner = MWT.winner(child);
-            if(bin[winner].capacity < objectSize[i])
-                child++;
-            child *= 2;
-        }
-        int BinToUse;
-        child /= 2;
-        if(child < n){
-            BinToUse = MWT.winner(child);
-            if(BinToUse > 1 && bin[BinToUse-1].capacity >= objectSize[i])
-                BinToUse--;
-        }
-        else
-            BinToUse = MWT.winner(child/2);
-        printf("Pack object %d in bin %d\n", i, BinToUse);
-        bin[BinToUse].capacity -= objectSize[i];
-        MWT.rePlay(BinToUse);
-    }*/
 
 }
 
-void BinPacking::firstFitPack2(int *objectSize, int numberOfObjects, int binCapacity){
+//Reference implementation, not called unless PRIMARY is undefined
+void BinPacking::firstFitPack(int *objectSize, int numberOfObjects, int binCapacity){
     int n = numberOfObjects;
     BinaryTreeNode *bin = new BinaryTreeNode[n+1];
     int i;
@@ -74,7 +48,6 @@ void BinPacking::firstFitPack2(int *objectSize, int numberOfObjects, int binCapa
         bin[i].capacity = binCapacity;
         bin[i].initialCapacity = binCapacity;
     }
-//    MaxWinnerTree MWT = MaxWinnerTree(bin,n);
     int j;
     for(i = 0;i<n;i++){
         for(j = 0;j<=n;j++){
@@ -90,6 +63,39 @@ void BinPacking::firstFitPack2(int *objectSize, int numberOfObjects, int binCapa
 
 
 void BinPacking::bestFitPack(int *objectSize, int numberOfObjects, int binCapacity){
+    int n = numberOfObjects;
+    BinaryTreeNode *bin = new BinaryTreeNode[n+1];
+    BinarySearchTree* BST = new BinarySearchTree();
+    int i;
+    for(i = 0; i <n;i++){
+        bin[i].capacity = binCapacity;
+        bin[i].initialCapacity = binCapacity;
+    }
+    for(i = 0; i<n;i++){
+        BST->insert(i,binCapacity);
+    }
+    int j;
+    int currentBin = -1;
+    for(i = 0;i<n;i++){
+        currentBin = -1;
+        for(j = 0;j<n;j++){
+            if(BST->find(j)->capacity >= objectSize[i]){
+                if(currentBin == -1){
+                    currentBin = j;
+                }
+                else{
+                    if(BST->find(j)->capacity < BST->find(currentBin)->capacity)
+                        currentBin = j;
+                }
+            }
+        }
+                BST->find(currentBin)->capacity -= objectSize[i];
+                printf("Pack object %d in bin %d\n", i+1, currentBin+1);
+    }
+}
+
+//Reference implementation, not called unless PRIMARY is undefined
+void BinPacking::bestFitPack2(int *objectSize, int numberOfObjects, int binCapacity){
         int n = numberOfObjects;
     BinaryTreeNode *bin = new BinaryTreeNode[n+1];
     int i;
@@ -97,14 +103,12 @@ void BinPacking::bestFitPack(int *objectSize, int numberOfObjects, int binCapaci
         bin[i].capacity = binCapacity;
         bin[i].initialCapacity = binCapacity;
     }
-//    MaxWinnerTree MWT = MaxWinnerTree(bin,n);
     int j;
     int currentBin = -1;
     for(i = 0;i<n;i++){
         currentBin = -1;
         for(j = 0;j<=n;j++){
             if(bin[j].capacity >= objectSize[i]){
-//printf("bin %d capacity: %d\n",j,bin[j].capacity);
                 if(currentBin == -1){
                     currentBin = j;
                 }
@@ -112,7 +116,6 @@ void BinPacking::bestFitPack(int *objectSize, int numberOfObjects, int binCapaci
                     if(bin[j].capacity < bin[currentBin].capacity)
                         currentBin = j;
                 }
-//printf("bin %d capacity: %d\n",currentBin,bin[currentBin].capacity);
             }
         }
                 bin[currentBin].capacity -= objectSize[i];

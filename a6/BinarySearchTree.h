@@ -13,9 +13,9 @@ class BinarySearchTree : public BinaryTree{
     public:
         BinarySearchTree();
         ~BinarySearchTree();
-        void insert(int capacity, int binNumber);
+        void insert(int binNumber, int capacity);
         void erase(BinaryTreeNode *n);
         BinaryTreeNode* find(int objectSize);
     protected:
-        int numberOfPlayers;		
+        int numberOfPlayers;	
 };

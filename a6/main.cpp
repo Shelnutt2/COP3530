@@ -92,11 +92,17 @@ int main(){
    }
 
   }
-
+#ifdef PRIMARY
   if(algorithm == 0)
     bp->firstFitPack(oArray, numObjects, binCap);
   else if(algorithm == 1)
     bp->bestFitPack(oArray, numObjects, binCap);
+#else
+  if(algorithm == 0)
+    bp->firstFitPack2(oArray, numObjects, binCap);
+  else if(algorithm == 1)
+    bp->bestFitPack2(oArray, numObjects, binCap);
+#endif
 }
 
 /*Please choose the algorithm for test: 1. Firstfit; 2. Bestfit; 3. Quit?1

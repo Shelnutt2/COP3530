@@ -20,96 +20,81 @@ Discussion section # : 1085
 
 using namespace std;
 
+BinarySearchTree::BinarySearchTree(){//Constructor
 
+}
 
-BinaryTreeNode* BinarySearchTree::find(const int theKey)
-{// Return pointer to matching pair.
- // Return NULL if no matching pair.
-   // p starts at the root and moves through
-   // the tree looking for an element with key theKey
-   BinaryTreeNode *p = root;
-   while (p != NULL)
-      // examine p->element
-      if (theKey < p->binNumber)
-         p = p->lchild;
+BinaryTreeNode* BinarySearchTree::find(const int binNumber){ //Find treenode with matching binNumber
+
+   BinaryTreeNode *p = root; //Set initial to root;
+   while (p != NULL) //Loop through all elements
+      if (binNumber < p->binNumber) //Compare binNumbers
+         p = p->lchild; //Move to left child
       else
-         if (theKey > p->binNumber)
-            p = p->rchild;
-         else // found matching pair
+         if (binNumber > p->binNumber) //Compare binNumbers
+            p = p->rchild; //Move to right child
+         else // found binNumber
             return p;
 
-   // no matching pair
    return NULL;
 }
 
-void BinarySearchTree::insert(int capacity, int binNumber)
-{// Insert node into the tree. Overwrite existing
- // pair, if any, with same key.
-   // find place to insert
-   BinaryTreeNode *p = root, *pp = NULL;
+void BinarySearchTree::insert(int binNumber, int capacity){ //Insert new bin
 
-   while (p != NULL)
-   {// examine p->element
+   BinaryTreeNode *p = root, *pp = NULL; //Create temp nodes
+
+   while (p != NULL){ //Loop through all nodes
+   
       pp = p;
-      // move p to a child
-      if (capacity < p->capacity)
-         p = p->lchild;
+      if (binNumber < p->binNumber) //Compare binNumber
+         p = p->lchild; //Move to the left child
       else
-         if (capacity > p->capacity)
-            p = p->rchild;
+         if (binNumber > p->binNumber) //Compare binNumber
+            p = p->rchild; //Move to the right child
          else
-         {// replace old value
-            p->binNumber = binNumber;
+         {//If binNumber already exist, set new capacity
+            p->capacity = capacity;
             return;
          }
    }
 
-   // get a node for thePair and attach to pp
+   //Else make new node
    BinaryTreeNode *newNode = new BinaryTreeNode();
-   newNode -> capacity = capacity;
-   newNode -> binNumber = binNumber;
-   if (root != NULL) // the tree is not empty
-      if (capacity < pp->capacity)
-         pp->lchild = newNode;
+   newNode -> capacity = capacity; //Set initial capacity
+   newNode -> binNumber = binNumber; //Set binNumber
+   if (root != NULL) // Make sure tree isn't empy
+      if (binNumber < pp->binNumber) //Compare binNumber
+         pp->lchild = newNode; //Set as left child
       else
-         pp->rchild = newNode;
+         pp->rchild = newNode; //Set as right child
    else
-      root = newNode; // insertion into empty tree
-   treeSize++;
+      root = newNode; //Else make it root element if tree is empty
+   treeSize++; //Increase treeSize
 }
 
 
-void BinarySearchTree::erase(BinaryTreeNode *n)
-{// Delete the pair, if any, whose key equals theKey.
+void BinarySearchTree::erase(BinaryTreeNode *n){ //Delete a node
 
-   // search for node with key theKey
+   //Find the given node
    BinaryTreeNode *p = root, *pp = NULL;
-   while (p != NULL && p == n)
-   {// move to a child of p
+   while (p != NULL && p == n){ //Loop through nodes
+   
       pp = p;
-      if (n->binNumber < p->binNumber)
-         p = p->lchild;
+      if (n->binNumber < p->binNumber) //Compare binNumbers
+         p = p->lchild; //Move to left child
       else
-         p = p->rchild;
+         p = p->rchild; //Move to right child
    }
    if (p == NULL)
-      return; // no pair with key theKey
+      return; 
 
-   // restructure tree
-   // handle case when p has two children
-   if (p->lchild != NULL && p->rchild != NULL)
-   {// two children
-      // convert to zero or one child case
-      // find largest element in left subtree of p
-      BinaryTreeNode*s = p->lchild, *ps = p;  // parent of s
-      while (s->rchild != NULL)
-      {// move to larger element
+   if (p->lchild != NULL && p->rchild != NULL){ //Reset the tree structure
+   
+      BinaryTreeNode*s = p->lchild, *ps = p;
+      while (s->rchild != NULL){
          ps = s;
          s = s->rchild;
       }
-
-      // move largest from s to p, can't do a simple move
-      // p->element = s->element as key is const
       BinaryTreeNode *q = new BinaryTreeNode(p->lchild, p->rchild,s);
       if (pp == NULL)
          root = q;
@@ -122,20 +107,15 @@ void BinarySearchTree::erase(BinaryTreeNode *n)
       delete p;
       p = s;
    }
-
-   // p has at most one child
-   // save child pointer in c
    BinaryTreeNode *c;
    if (p->lchild != NULL)
       c = p->lchild;
    else
       c = p->rchild;
 
-   // delete p
    if (p == root)
       root = c;
-   else
-   {// is p left or right child of pp?
+   else{
       if (p == pp->lchild)
          pp->lchild = c;
       else pp->rchild = c;

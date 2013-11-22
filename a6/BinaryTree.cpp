@@ -24,12 +24,12 @@ BinaryTree::BinaryTree(){
     root = new BinaryTreeNode();
 }
 
-BinaryTree::BinaryTree(BinaryTreeNode* node){
+BinaryTree::BinaryTree(BinaryTreeNode* node){ //Constructor
     root = node;
     treeSize++;
 }
 
-BinaryTreeNode* BinaryTree::visit(BinaryTreeNode* node){
+BinaryTreeNode* BinaryTree::visit(BinaryTreeNode* node){ //Constructor
     return node;
 }
 
@@ -53,7 +53,7 @@ void BinaryTree::preOrder(BinaryTreeNode* node){
     }
 }
 
-BinaryTreeNode* BinaryTree::findLast(BinaryTreeNode* node,int depth){
+BinaryTreeNode* BinaryTree::findLast(BinaryTreeNode* node,int depth){ //Find last node leaf
     if (node != NULL){ //If we are outside of the heap return
         depth++;
         node->depth = depth;
@@ -103,7 +103,7 @@ void BinaryTree::inOrder(BinaryTreeNode* node){
     }
 }
 
-BinaryTreeNode* BinaryTree::getbinNumber(BinaryTreeNode* node, int parentbinNumber){
+BinaryTreeNode* BinaryTree::getbinNumber(BinaryTreeNode* node, int parentbinNumber){ //Get bin by binNumber
     if (node != NULL){ //If we are outside of the heap return
         BinaryTreeNode* tmp = getbinNumber(node -> lchild,parentbinNumber); //Visit left child
 //        printf("parentbinNumber is: %d nodeBinNumber is: %d\n",parentbinNumber,node->binNumber);
@@ -120,15 +120,23 @@ BinaryTreeNode* BinaryTree::getbinNumber(BinaryTreeNode* node, int parentbinNumb
     return NULL;
 }
 
-BinaryTreeNode* BinaryTree::findLessObject(BinaryTreeNode* node, int objectSize){
+BinaryTreeNode* BinaryTree::findLessObject(BinaryTreeNode* node, int objectSize){ //Find the less of the nodes
     if (node != NULL){ //If we are outside of the heap return
         BinaryTreeNode* tmp = NULL;
         BinaryTreeNode* tmp2 = NULL;
         tmp = findLessObject(node -> lchild,objectSize); //Visit left child
         tmp2 = findLessObject(node -> rchild,objectSize); //Visit right child
-        printf("node Capacity is: %d objectSize is: %d\n",node->capacity ,objectSize);
+        printf("node is: %d node capacity is: %d objectSize is: %d\n",node->binNumber,node->capacity ,objectSize);
         if(node->capacity >= objectSize)
             return node;
+        else if(tmp!=NULL){
+            if(tmp->capacity >= objectSize)
+                return tmp;
+        }
+        else if(tmp2!=NULL){
+            if(tmp2->capacity >= objectSize)
+                return tmp2;
+        }
         if(tmp != NULL)
             return tmp;
         else if(tmp2 != NULL)
@@ -182,10 +190,6 @@ void BinaryTree::add(BinaryTreeNode* node){
     treeSize++;
 }
 
-/*void BinaryTree::insertBottom(){
-
-}*/
-
 void BinaryTree::addLeftChild(BinaryTreeNode* parent, BinaryTreeNode* child){
     parent -> lchild = child;
 }
@@ -208,7 +212,7 @@ void BinaryTree::sortMax(){ //Sorting algorthm
     }
 }
 
-void BinaryTree::swapLeft(BinaryTreeNode* first, BinaryTreeNode* second){
+void BinaryTree::swapLeft(BinaryTreeNode* first, BinaryTreeNode* second){ //Swap parent with left child
         BinaryTreeNode* firstr = first->rchild;
         BinaryTreeNode* firstp = first->parent;
         BinaryTreeNode* secondl = second->lchild;
@@ -221,7 +225,7 @@ void BinaryTree::swapLeft(BinaryTreeNode* first, BinaryTreeNode* second){
         second->parent = firstp;
 }
 
-void BinaryTree::swapRight(BinaryTreeNode* first, BinaryTreeNode* second){
+void BinaryTree::swapRight(BinaryTreeNode* first, BinaryTreeNode* second){ //Swap parent with right child
         BinaryTreeNode* firstl = first->lchild;
         BinaryTreeNode* firstp = first->parent;
         BinaryTreeNode* secondl = second->lchild;
@@ -234,7 +238,7 @@ void BinaryTree::swapRight(BinaryTreeNode* first, BinaryTreeNode* second){
         second->parent = firstp;
 }
 
-void BinaryTree::swapChildren(BinaryTreeNode* parent){
+void BinaryTree::swapChildren(BinaryTreeNode* parent){ //Swap children of parent
         BinaryTreeNode* leftl = parent->lchild->lchild;
         BinaryTreeNode* leftr = parent->lchild->rchild;
         BinaryTreeNode* rightl = parent->rchild->lchild;
