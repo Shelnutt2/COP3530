@@ -18,4 +18,5 @@ class BinaryTreeNode{
         int initialCapacity;
         int capacity;
         int binNumber;
+        int depth;
 };

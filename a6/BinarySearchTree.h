@@ -10,12 +10,12 @@ Discussion section # : 1085
 #endif
 
 class BinarySearchTree : public BinaryTree{
-	public:
-		BinarySearchTree();
-		~BinarySearchTree();
-		void insert(int capacity, int binNumber);
-		void erase(BinaryTreeNode *n);
-		BinaryTreeNode* find(int objectSize);
-       protected:
-       int numberOfPlayers;		
+    public:
+        BinarySearchTree();
+        ~BinarySearchTree();
+        void insert(int capacity, int binNumber);
+        void erase(BinaryTreeNode *n);
+        BinaryTreeNode* find(int objectSize);
+    protected:
+        int numberOfPlayers;		
 };

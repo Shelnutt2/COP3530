@@ -15,11 +15,13 @@ Discussion section # : 1085
 #endif
 
 #include <math.h>
+#include <stdio.h>
 
 using namespace std;
 
 BinaryTree::BinaryTree(){
     treeSize++;
+    root = new BinaryTreeNode();
 }
 
 BinaryTree::BinaryTree(BinaryTreeNode* node){
@@ -51,6 +53,48 @@ void BinaryTree::preOrder(BinaryTreeNode* node){
     }
 }
 
+BinaryTreeNode* BinaryTree::findLast(BinaryTreeNode* node,int depth){
+    if (node != NULL){ //If we are outside of the heap return
+        depth++;
+        node->depth = depth;
+        BinaryTreeNode* tmp = NULL;
+        BinaryTreeNode* tmp2 = NULL;
+        if(node -> lchild != NULL)
+            tmp = findLast(node -> lchild,depth); //Visit left child
+        if(node -> rchild != NULL)
+            tmp2 = findLast(node -> rchild,depth); //Visit right child
+        if(tmp != NULL){
+            if(node->depth > tmp->depth){
+                if(tmp2 != NULL){
+                    if(node->depth > tmp2->depth)
+                        return node;
+                    else
+                        return tmp2;
+                }
+                    return node;
+            }
+            else if(tmp->depth > node->depth){
+                if(tmp2 != NULL){
+                    if(tmp->depth > tmp2->depth)
+                        return tmp;
+                    else
+                        return tmp2;
+                }
+                    return tmp;
+            }
+            else if(tmp->depth > tmp2->depth){
+                     return tmp;
+            }
+            else if(tmp2->depth > tmp->depth){
+                     return tmp2;
+            }
+        }
+        else
+            return node;
+    }
+    return NULL;
+}
+
 void BinaryTree::inOrder(BinaryTreeNode* node){
     if (node != NULL){ //If we are outside of the heap return
       inOrder(node -> lchild); //Visit left child
@@ -62,31 +106,33 @@ void BinaryTree::inOrder(BinaryTreeNode* node){
 BinaryTreeNode* BinaryTree::getbinNumber(BinaryTreeNode* node, int parentbinNumber){
     if (node != NULL){ //If we are outside of the heap return
         BinaryTreeNode* tmp = getbinNumber(node -> lchild,parentbinNumber); //Visit left child
-        if(node->binNumber == parentbinNumber)
+//        printf("parentbinNumber is: %d nodeBinNumber is: %d\n",parentbinNumber,node->binNumber);
+        if(node->binNumber == parentbinNumber){
+//            printf("Found parentnode\n");
             return node;
+        }
         BinaryTreeNode* tmp2 = getbinNumber(node -> rchild,parentbinNumber); //Visit right child
         if(tmp != NULL)
             return tmp;
         else if(tmp2 != NULL)
             return tmp2;
-        else
-            return NULL;
     }
     return NULL;
 }
 
 BinaryTreeNode* BinaryTree::findLessObject(BinaryTreeNode* node, int objectSize){
     if (node != NULL){ //If we are outside of the heap return
-        BinaryTreeNode* tmp = getbinNumber(node -> lchild,objectSize); //Visit left child
+        BinaryTreeNode* tmp = NULL;
+        BinaryTreeNode* tmp2 = NULL;
+        tmp = findLessObject(node -> lchild,objectSize); //Visit left child
+        tmp2 = findLessObject(node -> rchild,objectSize); //Visit right child
+        printf("node Capacity is: %d objectSize is: %d\n",node->capacity ,objectSize);
         if(node->capacity >= objectSize)
             return node;
-        BinaryTreeNode* tmp2 = getbinNumber(node -> rchild,objectSize); //Visit right child
         if(tmp != NULL)
             return tmp;
         else if(tmp2 != NULL)
             return tmp2;
-        else
-            return NULL;
     }
     return NULL;
 }
@@ -110,13 +156,28 @@ void BinaryTree::insertTop(BinaryTreeNode* node){
     sortMax();
 }
 
+/*BinaryTreeNode* BinaryTree::getLastLeaf(){
+    int leftDepth = 1;
+    BinaryTreeNode* node = root;
+    while(node != null){
+        if(node -> lchild != null){
+            node = node->lchild;
+            leftDepth++
+        }
+    }
+}*/
+
 void BinaryTree::add(BinaryTreeNode* node){
     int parentbinNumber = floor((treeSize+1)/2);
-    BinaryTreeNode* parentNode = getbinNumber(root,parentbinNumber);
+//    printf("parentbinNumber: %d\n",parentbinNumber);
+    BinaryTreeNode* parentNode = findLast(root,0);
+    if(parentNode != root)
+        parentNode = parentNode->parent;
     if(parentNode -> lchild == NULL)
         parentNode -> lchild = node;
     else if(parentNode -> rchild == NULL)
         parentNode -> rchild = node;
+    node -> parent = parentNode;
     sortMax();
     treeSize++;
 }
@@ -188,7 +249,8 @@ void BinaryTree::swapChildren(BinaryTreeNode* parent){
 }
 
 void BinaryTree::binCompare(BinaryTreeNode* index){ //Compare function
-
+    if(index == NULL)
+        return;
     if(index ->lchild != NULL && index->binNumber < index->lchild ->binNumber){ //Check for if the right child is smaller
         swapLeft(index,index->lchild);
 /*        int tmpinitialCapacity = index->initialCapacity, tmpCapacity = index->Capacity, tmpbinNumber = index->binNumber;
@@ -204,7 +266,7 @@ void BinaryTree::binCompare(BinaryTreeNode* index){ //Compare function
         swapRight(index,index->rchild);
         binCompare(index->rchild); //Check to see if we need to sort down
     }
-    if(index->lchild->binNumber > index->rchild->binNumber){ //Check if childnodes need swaping
+    if(index->lchild != NULL && index->rchild != NULL && index->lchild->binNumber > index->rchild->binNumber){ //Check if childnodes need swaping
         /*int tmpinitialCapacity = index->rchild->initialCapacity, tmpCapacity = index->rchild->Capacity, tmpbinNumber = index->rchild->binNumber;
         index ->rchild -> initialCapacity = index ->lchild -> initialCapacity ;
         index ->rchild ->  capacity = ndex ->lchild ->  capacity ;

@@ -19,6 +19,7 @@ Discussion section # : 1085
 #include <cstddef>
 #endif
 
+#include <stdio.h>
 using namespace std;
 
 MaxWinnerTree::MaxWinnerTree(int *object, int numberofObjects){
@@ -28,9 +29,12 @@ MaxWinnerTree::MaxWinnerTree(int *object, int numberofObjects){
 
 MaxWinnerTree::MaxWinnerTree(int *object, int numberofObjects, int binCapacity){
             binTree = new BinaryTree();
-            binTree->setCapacity(binTree->root,binCapacity);
-            binTree->setinitialCapacity(binTree->root,binCapacity);
-            binTree->setbinNumber(binTree->root,1);
+            binTree->root->capacity = binCapacity;
+            binTree->root->initialCapacity = binCapacity;
+            binTree->root->binNumber = 1;
+//            binTree->setCapacity(binTree->root,binCapacity);
+  //          binTree->setinitialCapacity(binTree->root,binCapacity);
+    //        binTree->setbinNumber(binTree->root,1);
             //initialize(object, numberofObjects);
 }
 
@@ -62,7 +66,16 @@ BinaryTreeNode* MaxWinnerTree::play(int objectSize){
             }
         }
         else{
-            return binTree->findLessObject(binTree->root,objectSize);            
+            BinaryTreeNode* newNode = binTree->findLessObject(binTree->root,objectSize);
+            if(newNode == NULL){
+                newNode = new BinaryTreeNode();
+                newNode->initialCapacity=binTree->root->initialCapacity;
+                newNode->binNumber = binTree->treeSize+1;
+                binTree->add(newNode);
+                return newNode;
+            }
+            else
+                return newNode;
         }
     
 }

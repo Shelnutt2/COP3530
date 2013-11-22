@@ -20,6 +20,7 @@ class BinaryTree{
         void inOrder(BinaryTreeNode* node);
         BinaryTreeNode* getbinNumber(BinaryTreeNode* node, int binNum);
         BinaryTreeNode* findLessObject(BinaryTreeNode* node, int binNum);
+        BinaryTreeNode* findLast(BinaryTreeNode* node, int depth);
         void postOrder(BinaryTreeNode* node);
         void setCapacity(BinaryTreeNode* node, int binCapacity);
         void setinitialCapacity(BinaryTreeNode* node, int binCapacity);

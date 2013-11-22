@@ -30,7 +30,7 @@ void BinPacking::firstFitPack(int *objectSize, int numberOfObjects, int binCapac
         BinaryTreeNode* bin = MWT->play(objectSize[i]);
         bin->capacity -= objectSize[i];
         printf("Pack object %d in bin %d\n", i+1, bin->binNumber);            
-        }
+    }
     
 
 /*    int n = numberOfObjects;
