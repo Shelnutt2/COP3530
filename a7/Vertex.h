@@ -18,6 +18,9 @@ class Vertex {
         link* connections;
         int id;
         int numConnections;
+        int weight;
+        int* route;
+        int hops;
 };
 
 struct link{

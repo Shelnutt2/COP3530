@@ -124,7 +124,7 @@ int main(){
         vertex5->addConnection(new link(vertex4,60));
         Vertex *vertexArray[6] = {vertex1,vertex2,vertex3,vertex4,vertex5,vertex6};
         graph = new Graph(vertex1,vertexArray,6);
-        Dijkstras(graph);
+        Dijkstras(graph,vertex2);
 
     }
 }

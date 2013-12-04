@@ -33,5 +33,5 @@ clean:
 	rm -rf *o main SethShelnutt_42941969.tar
 
 tar:
-	tar -cf SethShelnutt_42941969.tar link.h link.cpp Vertex.cpp Vertex.h main.cpp myException.cpp Graph.cpp Graph.h Makefile myException.h
+	tar -cf SethShelnutt_42941969.tar Vertex.cpp Vertex.h main.cpp myException.cpp Graph.cpp Graph.h Makefile myException.h
 
