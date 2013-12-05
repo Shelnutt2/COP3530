@@ -20,6 +20,59 @@ Discussion section # : 1085
 
 using namespace std;
 
+
+void temp(){
+    // remember to insert edges both ways for an undirected graph
+    aList alist(6);
+    // 0 = a
+    alist[0].push_back(Vertex(1, 10));
+    alist[0].push_back(Vertex(3, 30));
+    alist[0].push_back(Vertex(4, 100));
+    // 1 = b
+    alist[1].push_back(Vertex(0, 10));
+    alist[1].push_back(Vertex(2, 50));
+    // 2 = c
+    alist[2].push_back(Vertex(1, 50));
+    alist[2].push_back(Vertex(3, 20));
+    alist[2].push_back(Vertex(4, 10));
+    alist[2].push_back(Vertex(5, 5));
+    // 3 = d
+    alist[3].push_back(Vertex(0, 30));
+    alist[3].push_back(Vertex(2, 20));
+    alist[3].push_back(Vertex(4, 60));
+    alist[3].push_back(Vertex(5, 15));
+    // 4 = e
+    alist[4].push_back(Vertex(0, 100));
+    alist[4].push_back(Vertex(2, 10));
+    alist[4].push_back(Vertex(3, 60));
+    // 5 = f
+    alist[5].push_back(Vertex(2, 15));
+    alist[5].push_back(Vertex(3, 5));
+ 
+    std::vector<double> min_distance;
+    std::vector<int> previous;
+    DijkstraComputePaths(0, alist, min_distance, previous);
+    std::vector<double> min_distance_sorted = min_distance;
+    std::sort (min_distance_sorted.begin(), min_distance_sorted.end());
+    int i = 0;
+    int j = 0;
+    for(j=0;j<min_distance.size();j++){
+        for(i=0;i<min_distance.size();i++){
+            if(min_distance_sorted[j] == min_distance[i]){
+                cout << min_distance[i] << ": ";
+                std::list<int> path = DijkstraGetShortestPathTo(i, previous);
+                list<int>::const_iterator it;
+                for(std::list<int>::iterator it=path.begin(); it != path.end(); ++it){
+                    cout << *it+1;
+                    if( *it != path.back())
+                        printf(" -> ");
+                }
+                printf("\n");
+            }
+        }
+    }
+}
+
 int main(){
   long int data;
   long int x = 0;
@@ -96,6 +149,7 @@ int main(){
   }
 #endif
     }
+#if 0
     else{
         Vertex* vertex1 = new Vertex();
         Vertex* vertex2 = new Vertex();
@@ -127,4 +181,6 @@ int main(){
         Dijkstras(graph,vertex2);
 
     }
+#endif
+    temp();
 }

@@ -25,6 +25,11 @@ Vertex::Vertex(link* newConnections, int newNumConnections, int newId){
     }
 }
 
+Vertex::Vertex(int arg_target, double arg_weight){
+    target = arg_target;
+    weight = arg_weight;
+}
+
 void Vertex::addConnection(link* newLink){
     int i = 0;
     int j = 0;

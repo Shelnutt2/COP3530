@@ -13,14 +13,16 @@ class Vertex {
         Vertex();
         Vertex(link* newConnections, int newNumConnections, int id);
         void addConnection(link* newLink);
+        Vertex(int arg_target, double arg_weight);
        
     public:
         link* connections;
         int id;
+        int target;
         int numConnections;
         int weight;
-        int* route;
         int hops;
+        int* route;
 };
 
 struct link{
