@@ -12,15 +12,15 @@ Discussion section # : 1085
 using namespace std;
 
 
-class Graph{
+class Graph{ //Graph to hold the Vertexs
 
     public:
         Graph();
         Graph(Vertex* rootVertex,Vertex* *arrayVertexs,int numberOfVertexs);
 
     public:
-        int numVertexs;
-        Vertex* rootVertex;
+        int numVertexs; //Number of Vertex in graph
+        Vertex* rootVertex; //Root Vertex
         Vertex* *vertexArray;
 
 };

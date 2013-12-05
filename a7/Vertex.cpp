@@ -15,7 +15,7 @@ Vertex::Vertex(){
 
 }
 
-Vertex::Vertex(link* newConnections, int newNumConnections, int newId){
+Vertex::Vertex(link* newConnections, int newNumConnections, int newId){ //Constructor
     id = newId;
     numConnections = newNumConnections;
     connections = new link[numConnections];
@@ -25,12 +25,12 @@ Vertex::Vertex(link* newConnections, int newNumConnections, int newId){
     }
 }
 
-Vertex::Vertex(int arg_target, double arg_weight){
+Vertex::Vertex(int arg_target, double arg_weight){ //Constructor
     target = arg_target;
     weight = arg_weight;
 }
 
-void Vertex::addConnection(link* newLink){
+void Vertex::addConnection(link* newLink){ //Add a new connection between Vertexs
     int i = 0;
     int j = 0;
     for(i=0;i<numConnections;i++){ //Check to see if link already exists

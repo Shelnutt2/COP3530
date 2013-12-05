@@ -26,12 +26,9 @@ myException.o: myException.cpp
 Graph.o: Graph.cpp
 	$(CC) $(CFLAGS) Graph.cpp
 
-link.o: link.cpp
-	$(CC) $(CFLAGS) link.cpp
-
 clean:
 	rm -rf *o main SethShelnutt_42941969.tar
 
 tar:
-	tar -cf SethShelnutt_42941969.tar Vertex.cpp Vertex.h main.cpp myException.cpp Graph.cpp Graph.h Makefile myException.h
+	tar -cf SethShelnutt_42941969.tar Dijkstras.h Vertex.cpp Vertex.h main.cpp myException.cpp Graph.cpp Graph.h Makefile myException.h
 

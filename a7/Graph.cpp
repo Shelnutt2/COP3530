@@ -11,12 +11,12 @@ Discussion section # : 1085
 
 using namespace std;
 
-Graph::Graph(){
+Graph::Graph(){ //Default Constructor
     rootVertex = new Vertex();
     
 }
 
-Graph::Graph(Vertex* vertex,Vertex* *arrayVertexs,int V){
+Graph::Graph(Vertex* vertex,Vertex* *arrayVertexs,int V){ //Constructor with initlization
     rootVertex = vertex;
     numVertexs = V;
     vertexArray = arrayVertexs;

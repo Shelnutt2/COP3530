@@ -11,9 +11,9 @@ struct link;
 class Vertex {
     public:
         Vertex();
-        Vertex(link* newConnections, int newNumConnections, int id);
-        void addConnection(link* newLink);
-        Vertex(int arg_target, double arg_weight);
+        Vertex(link* newConnections, int newNumConnections, int id); //Constructor
+        void addConnection(link* newLink); //Add connection between vertexs
+        Vertex(int arg_target, double arg_weight); //Constructor
        
     public:
         link* connections;
@@ -25,7 +25,7 @@ class Vertex {
         int* route;
 };
 
-struct link{
+struct link{ //Struct to handle links between vertexs
         Vertex* vertex;
         int weight;
         link() : vertex(), weight() {}
